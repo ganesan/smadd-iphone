@@ -7,12 +7,16 @@
 //
 
 #import "FlipsideViewController.h"
+#import "SmAddViewController.h"
 
 @interface MainViewController : UIViewController <FlipsideViewControllerDelegate> {
-
+    SmAddViewController *smAddView;
+    SmAddViewController *smAddView2;
 }
 
 
 - (IBAction)showInfo:(id)sender;
-
+- (IBAction)addSmAddView:(id)sender;
+- (IBAction)refreshSmAddView:(id)sender;
+- (IBAction)removeSmAddView:(id)sender;
 @end

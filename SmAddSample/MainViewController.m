@@ -10,13 +10,101 @@
 
 @implementation MainViewController
 
-/*
-// Implement viewDidLoad to do additional setup after loading the view, typically from a nib.
-- (void)viewDidLoad
-{
-    [super viewDidLoad];
+#pragma IBAction section
+- (IBAction)addSmAddView:(id)sender {
+    if(!smAddView) {
+        smAddView = [[SmAddViewController alloc] initWithNibName:nil bundle:nil];
+        [smAddView setIsAdInTop:NO];
+        [smAddView setEnableAdNameSortByPriority:@"iad,housead"];
+        [smAddView setSmaddAdServerUrl:@"http://public.sumyapp.com/adpriority_smaddtest1.html"];
+        // 複数のSmAddViewを導入する場合、tagを付けてください。どのようなあたいでも構いません。
+        [smAddView setTag:@"1"];
+        [smAddView.view setFrame:CGRectMake(0, 400-44, 320, 60)];
+        [self.view addSubview:smAddView.view];
+        [smAddView startAd];
+    }
+    else if(!smAddView2) {
+        smAddView2 = [[SmAddViewController alloc] initWithNibName:nil bundle:nil];
+        [smAddView2 setIsAdInTop:YES];
+        [smAddView2 setEnableAdNameSortByPriority:@"iad,housead"];
+        [smAddView2 setSmaddAdServerUrl:@"http://public.sumyapp.com/adpriority_smaddtest2.html"];
+        // 複数のSmAddViewを導入する場合、tagを付けてください。どのようなあたいでも構いません。
+        [smAddView setTag:@"2"];
+        [smAddView2.view setFrame:CGRectMake(0, 0, 320, 60)];
+        [self.view addSubview:smAddView2.view];
+        [smAddView2 startAd];
+    }
 }
-*/
+
+- (IBAction)refreshSmAddView:(id)sender {
+    if(smAddView) {
+        [smAddView stopAd];
+        [smAddView startAd];
+    }
+    if(smAddView2) {
+        [smAddView2 stopAd];
+        [smAddView2 startAd];
+    }
+}
+
+- (IBAction)removeSmAddView:(id)sender {
+    if(smAddView2) {
+        [smAddView2.view removeFromSuperview];
+        [smAddView2 stopAd];
+        [smAddView2 release];
+        smAddView2 = nil;
+    }
+    else if(smAddView) {
+        [smAddView.view removeFromSuperview];
+        [smAddView stopAd];
+        [smAddView release];
+        smAddView = nil;
+    }
+}
+
+// Implement viewDidLoad to do additional setup after loading the view, typically from a nib.
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    
+    // 国別に異なる広告設定を使用したい場合
+    NSLog(@"currentLocale = %@", [[NSLocale currentLocale] objectForKey:NSLocaleCountryCode]);
+    if([[[NSLocale currentLocale] objectForKey:NSLocaleCountryCode] isEqualToString:@"JP"]) {
+        smAddView = [[SmAddViewController alloc] initWithNibName:nil bundle:nil
+                                                       isAdInTop:NO
+                                      enableAdNameSortByPriority:@"adlantis,admob,admaker,housead"];
+    }
+    else {
+        smAddView = [[SmAddViewController alloc] initWithNibName:nil bundle:nil
+                                                       isAdInTop:NO
+                                      enableAdNameSortByPriority:@"iad,admob,admaker,housead"];
+    }
+    [smAddView.view setFrame:CGRectMake(0, 400-44, 320, 60)];
+    [self.view addSubview:smAddView.view];
+    
+    if (&UIApplicationDidEnterBackgroundNotification) {
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(viewWillDisappear:)
+                                                     name:UIApplicationDidEnterBackgroundNotification
+                                                   object:[UIApplication sharedApplication]];
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(viewWillAppear:)
+                                                     name:UIApplicationDidBecomeActiveNotification
+                                                   object:[UIApplication sharedApplication]];
+    }
+}
+
+#pragma mark - View lifecycle
+- (void)viewWillAppear:(BOOL)animated {
+    NSLog(@"viewWillAppear");
+    [smAddView startAd];
+    [smAddView2 startAd];
+}
+
+- (void)viewWillDisappear:(BOOL)animated {
+    NSLog(@"viewWillDisappear");
+    [smAddView stopAd];
+    [smAddView2 stopAd];
+}
 
 - (void)flipsideViewControllerDidFinish:(FlipsideViewController *)controller
 {
@@ -58,6 +146,8 @@
 
 - (void)dealloc
 {
+    [smAddView stopAd], [smAddView release];
+    [smAddView2 stopAd],[smAddView2 release];
     [super dealloc];
 }
 
