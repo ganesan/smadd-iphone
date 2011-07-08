@@ -20,6 +20,7 @@
         // 複数のSmAddViewを導入する場合、tagを付けてください。どのようなあたいでも構いません。
         [smAddView setTag:@"1"];
         [smAddView setFrame:CGRectMake(0, 400-44, 320, 60)];
+        [smAddView setRootViewController:self];
         [self.view addSubview:smAddView.view];
         [smAddView startAd];
     }
@@ -31,6 +32,7 @@
         // 複数のSmAddViewを導入する場合、tagを付けてください。どのようなあたいでも構いません。
         [smAddView setTag:@"2"];
         [smAddView2 setFrame:CGRectMake(0, 0, 320, 60)];
+        [smAddView setRootViewController:self];
         [self.view addSubview:smAddView2.view];
         [smAddView2 startAd];
     }
@@ -79,6 +81,7 @@
                                       enableAdNameSortByPriority:@"iad,admob,iad,admaker,housead"];
     }
     [smAddView setFrame:CGRectMake(0, 400-44, 320, 60)];
+    [smAddView setRootViewController:self];
     [self.view addSubview:smAddView.view];
     
     if (&UIApplicationDidEnterBackgroundNotification) {

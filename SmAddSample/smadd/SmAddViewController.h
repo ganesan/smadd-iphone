@@ -117,6 +117,7 @@
     NSString *enableAdNameSortByPriority;
     NSString *tag;
     CGRect varFrame;
+    id rootViewController;
 }
 - (void)startAd;
 - (void)stopAd;
@@ -160,4 +161,5 @@ enableAdNameSortByPriority:(NSString*)adNames;
 @property (retain, readwrite) NSString *smaddAdServerUrl;
 @property (retain, readwrite) NSString *enableAdNameSortByPriority;
 @property (retain, readwrite) NSString *tag;
+@property (readwrite, assign) id rootViewController;
 @end

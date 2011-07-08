@@ -96,6 +96,7 @@
 @synthesize smaddAdServerUrl;
 @synthesize enableAdNameSortByPriority;
 @synthesize tag;
+@synthesize rootViewController;
 
 /**
  * This is AdViewController core method
@@ -477,7 +478,7 @@ didFailToReceiveAdWithError:(GADRequestError *)error {
         
         // Let the runtime know which UIViewController to restore after taking
         // the user wherever the ad goes and add it to the view hierarchy.
-        adMob.rootViewController = self;
+        adMob.rootViewController = rootViewController;
         [adMob setDelegate:self];
         [self.view addSubview:adMob];
         
