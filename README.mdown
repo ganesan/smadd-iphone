@@ -1,0 +1,39 @@
+SmAdd for iPhone
+==================
+[SmAdd for iPhone][1] is a advertising maximize service.<br />
+If you use this, you get more money.And, this service is FREE.<br />
+This SDK very very simple, You will be easy to use.
+
+Main features
+-------------
+  * Switch to AdServicean based on iPhone's locale information
+  * Get an ad order by priority
+  * This SDK support some ad service these are able to use in JAPAN
+    * iAd http://developer.apple.com/iad/
+    * AdMob http://www.admob.com/
+    * AdMaker http://jp.ad-maker.net/
+    * AdLantis http://tn.adlantis.jp/iPhoneAppOwner
+    * TG-AD for iPhone http://iphone.trafficgate.net/    
+    * AmeAd(Future) http://www.cyberagent.co.jp/news/press/2010/1217_1.html
+    * nend(Future) http://nend.net/
+
+Build Requirements
+------------------
+  * Mac OS X 10.6, Xcode 4.0 (or newer)
+
+Runtime Requirements
+--------------------
+  * iOS 3.1.3 or newer
+  * SystemConfiguration.framework
+
+How to start a use
+-----------------------
+1. Please read README.doc
+
+License
+-----------------------
+GNU General Public License
+
+THE SOFTWARE.
+---
+[1]: http://www.smadd.net/ "smadd"

@@ -70,7 +70,6 @@
 //////////////////
 //SmAdd
 //////////////////
-#define SMADD_TIMEOUT_TIME 15
 #define SMADD_ADDISABLE_NAME @"disable"
 
 //TODO: remove not use adservice's delegate
@@ -117,9 +116,12 @@
     NSString *smaddAdServerUrl;
     NSString *enableAdNameSortByPriority;
     NSString *tag;
+    CGRect varFrame;
 }
 - (void)startAd;
 - (void)stopAd;
+- (void)setFrame:(CGRect)frame;
+- (CGRect)getFrame;
 - (id)initWithNibName:(NSString *)nibNameOrNil
                bundle:(NSBundle *)nibBundleOrNil
             isAdInTop:(BOOL)adInTop

@@ -19,7 +19,7 @@
         [smAddView setSmaddAdServerUrl:@"http://public.sumyapp.com/adpriority_smaddtest1.html"];
         // 複数のSmAddViewを導入する場合、tagを付けてください。どのようなあたいでも構いません。
         [smAddView setTag:@"1"];
-        [smAddView.view setFrame:CGRectMake(0, 400-44, 320, 60)];
+        [smAddView setFrame:CGRectMake(0, 400-44, 320, 60)];
         [self.view addSubview:smAddView.view];
         [smAddView startAd];
     }
@@ -30,7 +30,7 @@
         [smAddView2 setSmaddAdServerUrl:@"http://public.sumyapp.com/adpriority_smaddtest2.html"];
         // 複数のSmAddViewを導入する場合、tagを付けてください。どのようなあたいでも構いません。
         [smAddView setTag:@"2"];
-        [smAddView2.view setFrame:CGRectMake(0, 0, 320, 60)];
+        [smAddView2 setFrame:CGRectMake(0, 0, 320, 60)];
         [self.view addSubview:smAddView2.view];
         [smAddView2 startAd];
     }
@@ -76,31 +76,31 @@
     else {
         smAddView = [[SmAddViewController alloc] initWithNibName:nil bundle:nil
                                                        isAdInTop:NO
-                                      enableAdNameSortByPriority:@"iad,admob,admaker,housead"];
+                                      enableAdNameSortByPriority:@"iad,admob,iad,admaker,housead"];
     }
-    [smAddView.view setFrame:CGRectMake(0, 400-44, 320, 60)];
+    [smAddView setFrame:CGRectMake(0, 400-44, 320, 60)];
     [self.view addSubview:smAddView.view];
     
     if (&UIApplicationDidEnterBackgroundNotification) {
         [[NSNotificationCenter defaultCenter] addObserver:self
-                                                 selector:@selector(viewWillDisappear:)
+                                                 selector:@selector(applicationWillDisappear:)
                                                      name:UIApplicationDidEnterBackgroundNotification
                                                    object:[UIApplication sharedApplication]];
         [[NSNotificationCenter defaultCenter] addObserver:self
-                                                 selector:@selector(viewWillAppear:)
+                                                 selector:@selector(applicationWillAppear:)
                                                      name:UIApplicationDidBecomeActiveNotification
                                                    object:[UIApplication sharedApplication]];
     }
 }
 
 #pragma mark - View lifecycle
-- (void)viewWillAppear:(BOOL)animated {
+- (void)applicationWillAppear:(BOOL)animated {
     NSLog(@"viewWillAppear");
     [smAddView startAd];
     [smAddView2 startAd];
 }
 
-- (void)viewWillDisappear:(BOOL)animated {
+- (void)applicationWillDisappear:(BOOL)animated {
     NSLog(@"viewWillDisappear");
     [smAddView stopAd];
     [smAddView2 stopAd];

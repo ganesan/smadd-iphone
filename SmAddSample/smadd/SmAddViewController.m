@@ -60,6 +60,8 @@
 - (void)getEnableAdNamesSortByPriorityDidEnd:(NSString*)result;
 - (void)reciveAdStatus:(NSString*)adName
 			  dataType:(int)dataType;
+- (void)disapperThisView;
+- (void)apperThisView;
 //AdStatusReport(FeatureService)
 - (BOOL)checkFirstLaunchToday;
 - (NSString*)devicePlatform;
@@ -163,6 +165,16 @@
 #ifdef SMADD_ADLANTIS_NAME
     [self removeAdlantis];
 #endif
+}
+
+- (void)setFrame:(CGRect)frame {
+    SMADD_LOG_METHOD
+    self.view.frame = frame;
+    varFrame = frame;
+}
+
+- (CGRect)getFrame {
+    return self.view.frame;
 }
 
 /**
@@ -338,10 +350,12 @@ didFailToReceiveAdWithError:(GADRequestError *)error {
 
 - (void)adViewWillPresentScreen:(GADBannerView *)bannerView {
     SMADD_LOG_METHOD
+    [self disapperThisView];
 }
 
 - (void)adViewDidDismissScreen:(GADBannerView *)bannerView {
     SMADD_LOG_METHOD
+    [self apperThisView];
 }
 
 - (void)adViewWillLeaveApplication:(GADBannerView *)bannerView {
@@ -357,11 +371,13 @@ didFailToReceiveAdWithError:(GADRequestError *)error {
 #ifdef SMADD_IAD_NAME
 - (BOOL)bannerViewActionShouldBegin:(ADBannerView *)banner willLeaveApplication:(BOOL)willLeave {
 	SMADD_LOG_METHOD
+    [self disapperThisView];
 	return YES;
 }
 
 - (void)bannerViewActionDidFinish:(ADBannerView *)banner {
 	SMADD_LOG_METHOD
+    [self apperThisView];
 }
 
 - (void)bannerViewDidLoadAd:(ADBannerView *)banner {
@@ -447,8 +463,13 @@ didFailToReceiveAdWithError:(GADRequestError *)error {
             adMob = [[GADBannerView alloc]
                      initWithFrame:CGRectMake(0,0,GAD_SIZE_320x50.width,GAD_SIZE_320x50.height)];
         } else {
+#ifdef SMADD_TGAD_NAME
             adMob = [[GADBannerView alloc]
                      initWithFrame:CGRectMake(0,10,GAD_SIZE_320x50.width,GAD_SIZE_320x50.height)];
+#else
+            adMob = [[GADBannerView alloc]
+                     initWithFrame:CGRectMake(0,0,GAD_SIZE_320x50.width,GAD_SIZE_320x50.height)];
+#endif
         }
         
         // Specify the ad's "unit identifier." This is your AdMob Publisher ID.
@@ -499,7 +520,12 @@ didFailToReceiveAdWithError:(GADRequestError *)error {
             [adMaker setFrame:CGRectMake(0,0,320,50)];
         }
         else {
+#ifdef SMADD_TGAD_NAME
             [adMaker setFrame:CGRectMake(0,10,320,50)];
+#else
+            [adMaker setFrame:CGRectMake(0,0,320,50)];
+#endif
+            
         }
         [adMaker start];
 	}
@@ -531,7 +557,11 @@ didFailToReceiveAdWithError:(GADRequestError *)error {
         if(isAdInTop) {
             iAd = [[ADBannerView alloc] initWithFrame:CGRectMake(0, 0, 320, 50)];
         } else {
+#ifdef SMADD_TGAD_NAME
             iAd = [[ADBannerView alloc] initWithFrame:CGRectMake(0, 10, 320, 50)];
+#else
+            iAd = [[ADBannerView alloc] initWithFrame:CGRectMake(0, 0, 320, 50)];
+#endif
         }
 	}
 	else {
@@ -576,7 +606,11 @@ didFailToReceiveAdWithError:(GADRequestError *)error {
             houseAd = [[AdViewTemplate alloc]initWithFrame:CGRectMake(0, 0, 320, 50)];
         }
         else {
+#ifdef SMADD_TGAD_NAME
             houseAd = [[AdViewTemplate alloc]initWithFrame:CGRectMake(0, 10, 320, 50)];
+#else
+            houseAd = [[AdViewTemplate alloc]initWithFrame:CGRectMake(0, 0, 320, 50)];
+#endif
         }
 	}
 	else {
@@ -651,7 +685,11 @@ didFailToReceiveAdWithError:(GADRequestError *)error {
         if(isAdInTop) {
             adlantis = [[AdlantisView alloc] initWithFrame:CGRectMake(0, 0, 320, 50)];
         } else {
+#ifdef SMADD_TGAD_NAME
             adlantis = [[AdlantisView alloc] initWithFrame:CGRectMake(0, 10, 320, 50)];
+#else
+            adlantis = [[AdlantisView alloc] initWithFrame:CGRectMake(0, 0, 320, 50)];
+#endif
         }
 	}
     
@@ -821,13 +859,26 @@ didFailToReceiveAdWithError:(GADRequestError *)error {
     return sNetworkReachable;
 }
 
-/*
- // Only override drawRect: if you perform custom drawing.
- // An empty implementation adversely affects performance during animation.
- - (void)drawRect:(CGRect)rect {
- // Drawing code.
- }
- */
+- (void)disapperThisView {
+    SMADD_LOG_METHOD
+    CGContextRef context = UIGraphicsGetCurrentContext();
+    [UIView beginAnimations:nil context:context];
+    [UIView setAnimationDuration:0.2];
+    [self.view setAlpha:0.0];
+    [UIView commitAnimations];
+}
+
+- (void)apperThisView {
+    SMADD_LOG_METHOD
+    self.view.frame = varFrame;
+    
+    CGContextRef context = UIGraphicsGetCurrentContext();
+    [UIView beginAnimations:nil context:context];
+    [UIView setAnimationDuration:0.2];
+    [self.view setAlpha:1.0];
+    [UIView commitAnimations];
+
+}
 
 - (void)dealloc {
     SMADD_LOG_METHOD    
@@ -935,6 +986,26 @@ enableAdNameSortByPriority:(NSString*)adNames {
     [super viewDidLoad];
 }
 */
+
+- (void)viewWillAppear:(BOOL)animated {
+    SMADD_LOG_METHOD
+    SMADD_LOG(@"Frame = %f, %f, %f, %f", self.view.frame.origin.x, self.view.frame.origin.y, self.view.frame.size.width, self.view.frame.size.height );
+}
+- (void)viewWillDisappear:(BOOL)animated {
+    SMADD_LOG_METHOD
+    SMADD_LOG(@"Frame = %f, %f, %f, %f", self.view.frame.origin.x, self.view.frame.origin.y, self.view.frame.size.width, self.view.frame.size.height );
+    [self disapperThisView];
+}
+- (void)viewDidAppear:(BOOL)animated {
+    SMADD_LOG_METHOD
+    SMADD_LOG(@"Frame = %f, %f, %f, %f", self.view.frame.origin.x, self.view.frame.origin.y, self.view.frame.size.width, self.view.frame.size.height );
+    [self apperThisView];
+}
+
+- (void)viewDidDisappear:(BOOL)animated {
+    SMADD_LOG_METHOD
+    SMADD_LOG(@"Frame = %f, %f, %f, %f", self.view.frame.origin.x, self.view.frame.origin.y, self.view.frame.size.width, self.view.frame.size.height );
+}
 
 - (void)viewDidUnload
 {
