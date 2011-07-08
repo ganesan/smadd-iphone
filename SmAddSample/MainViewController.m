@@ -94,6 +94,9 @@
                                                      name:UIApplicationDidBecomeActiveNotification
                                                    object:[UIApplication sharedApplication]];
     }
+    else {
+        [smAddView startAd];
+    }
 }
 
 #pragma mark - View lifecycle
