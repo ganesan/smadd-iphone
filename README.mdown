@@ -14,8 +14,7 @@ Main features
     * AdMaker http://jp.ad-maker.net/
     * AdLantis http://tn.adlantis.jp/iPhoneAppOwner
     * TG-AD for iPhone http://iphone.trafficgate.net/    
-    * AmeAd(Future) http://www.cyberagent.co.jp/news/press/2010/1217_1.html
-    * nend(Future) http://nend.net/
+    * AD-STA https://admin.adsta.jp/
 
 Build Requirements
 ------------------

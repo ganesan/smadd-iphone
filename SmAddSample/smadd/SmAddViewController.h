@@ -17,6 +17,7 @@
  - iAd : iOS4.3
  - AdLantis : AdLantis iPhone SDK version v1.3
  - TGAD : v1.3.1
+ - AD-STA : 2011-05-26
  */
 //////////////////
 
