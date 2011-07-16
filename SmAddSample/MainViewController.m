@@ -73,12 +73,12 @@
     if([[[NSLocale currentLocale] objectForKey:NSLocaleCountryCode] isEqualToString:@"JP"]) {
         smAddView = [[SmAddViewController alloc] initWithNibName:nil bundle:nil
                                                        isAdInTop:NO
-                                      enableAdNameSortByPriority:@"adlantis,admob,admaker,housead"];
+                                      enableAdNameSortByPriority:@"adsta,adlantis,admob,admaker,housead"];
     }
     else {
         smAddView = [[SmAddViewController alloc] initWithNibName:nil bundle:nil
                                                        isAdInTop:NO
-                                      enableAdNameSortByPriority:@"iad,admob,iad,admaker,housead"];
+                                      enableAdNameSortByPriority:@"adsta,iad,admob,iad,admaker,housead"];
     }
     [smAddView setFrame:CGRectMake(0, 400-44, 320, 60)];
     [smAddView setRootViewController:self];

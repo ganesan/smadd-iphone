@@ -34,5 +34,11 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
+	<key>ADSTA_MEDIA_ID</key>
+	<string>sumyapp</string>
+	<key>ADSTA_SLOT_ID</key>
+	<string>1</string>
+	<key>ADSTA_TEST_MODE</key>
+	<true/>
 </dict>
 </plist>

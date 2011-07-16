@@ -40,12 +40,18 @@
 - (void)removeTGAd;
 #endif
 
-//AdLantis(Beta)
+//AdLantis
 #ifdef SMADD_ADLANTIS_NAME
 - (void)showAdlantis;
 - (void)removeAdlantis;
 - (void)adlantisFailedNotificationRecive:(NSNotificationCenter*)center;
 - (void)adlantisSuccessNotificationRecive:(NSNotificationCenter*)center;
+#endif
+
+//AD-STA
+#ifdef SMADD_ADSTA_NAME
+- (void)showADSTA;
+- (void)removeADSTA;
 #endif
 
 //HouseAd
@@ -87,6 +93,9 @@
 #endif
 #ifdef SMADD_HOUSEAD_NAME
 @synthesize houseAd;
+#endif
+#ifdef SMADD_ADSTA_NAME
+@synthesize adsta;
 #endif
 @synthesize loadingAdPriorityNumber;
 @synthesize enableAdNamesSortByPriority;
@@ -166,6 +175,9 @@
 #ifdef SMADD_ADLANTIS_NAME
     [self removeAdlantis];
 #endif
+#ifdef SMADD_ADSTA_NAME
+    [self removeADSTA];
+#endif
 }
 
 - (void)setFrame:(CGRect)frame {
@@ -178,9 +190,6 @@
     return self.view.frame;
 }
 
-/**
- * Please setting you use ad service remove method
- */
 - (void)reciveAdStatus:(NSString*)adName
 			  dataType:(int)dataType {
 	SMADD_LOG(@"-[AdViewController reciveAdStatus:%@ dataType:%d]", adName, dataType)
@@ -240,6 +249,15 @@
 		if(dataType == SMADD_AD_LOAD_ERROR){
 			[self tryNextAdLoad];
 			[self removeAdlantis];
+		}
+        return;
+	}
+#endif
+#ifdef SMADD_ADSTA_NAME
+	if([SMADD_ADSTA_NAME isEqualToString:adName]){
+		if(dataType == SMADD_AD_LOAD_ERROR){
+			[self tryNextAdLoad];
+			[self removeADSTA];
 		}
         return;
 	}
@@ -319,6 +337,12 @@
         return;
 	}
 #endif
+#ifdef SMADD_ADSTA_NAME
+	if([SMADD_ADSTA_NAME isEqualToString:[enableAdNamesSortByPriority objectAtIndex:loadingAdPriorityNumber]]){
+		[self showADSTA];
+        return;
+	}
+#endif
 #ifdef SMADD_ADDISABLE_NAME
     if([SMADD_ADDISABLE_NAME isEqualToString:[enableAdNamesSortByPriority objectAtIndex:loadingAdPriorityNumber]]){
 		[self stopAd];
@@ -330,127 +354,6 @@
 	[self tryNextAdLoad];
 }
 
-
-/**
- * This is AdMobDelagate section
- */
-#pragma mark AdMobDelegate
-#ifdef SMADD_ADMOB_NAME
-- (void)adViewDidReceiveAd:(GADBannerView *)bannerView {
-    SMADD_LOG_METHOD
-    [self reciveAdStatus:SMADD_ADMOB_NAME
-                dataType:SMADD_AD_LOAD_SUCCESS];
-}
-- (void)adView:(GADBannerView *)bannerView
-didFailToReceiveAdWithError:(GADRequestError *)error {
-    SMADD_LOG_METHOD
-    SMADD_LOG(@"adView:didFailToReceiveAdWithError:%@", [error localizedDescription])
-    [self reciveAdStatus:SMADD_ADMOB_NAME
-                dataType:SMADD_AD_LOAD_ERROR];
-}
-
-- (void)adViewWillPresentScreen:(GADBannerView *)bannerView {
-    SMADD_LOG_METHOD
-    [self disapperThisView];
-}
-
-- (void)adViewDidDismissScreen:(GADBannerView *)bannerView {
-    SMADD_LOG_METHOD
-    [self apperThisView];
-}
-
-- (void)adViewWillLeaveApplication:(GADBannerView *)bannerView {
-    SMADD_LOG_METHOD
-}
-#endif
-
-
-/**
- * This is iAdDelegate section
- */
-#pragma mark iAdDelegate
-#ifdef SMADD_IAD_NAME
-- (BOOL)bannerViewActionShouldBegin:(ADBannerView *)banner willLeaveApplication:(BOOL)willLeave {
-	SMADD_LOG_METHOD
-    [self disapperThisView];
-	return YES;
-}
-
-- (void)bannerViewActionDidFinish:(ADBannerView *)banner {
-	SMADD_LOG_METHOD
-    [self apperThisView];
-}
-
-- (void)bannerViewDidLoadAd:(ADBannerView *)banner {
-	SMADD_LOG_METHOD
-	[UIView beginAnimations:@"animateAdBannerOn" context:NULL];
-	[banner setAlpha:1.0];
-	[UIView commitAnimations];
-	
-	[self reciveAdStatus:SMADD_IAD_NAME
-				dataType:SMADD_AD_LOAD_SUCCESS];
-}
-
-- (void)bannerView:(ADBannerView *)banner didFailToReceiveAdWithError:(NSError *)error
-{
-	SMADD_LOG_METHOD
-	SMADD_LOG(@"%@", [error description])
-    
-	[UIView beginAnimations:@"animateAdBannerOff" context:NULL];
-	[banner setAlpha:0.0];
-	[UIView commitAnimations];
-	
-	[self reciveAdStatus:SMADD_IAD_NAME
-				dataType:SMADD_AD_LOAD_ERROR];
-}
-#endif
-
-
-/**
- * This is HouseAdDelagate section
- */
-#pragma mark HouseAdDelagate
-#ifdef SMADD_HOUSEAD_NAME
-- (void)adViewTemplate:(AdViewTemplate *)adView didFailToReceiveAdWithError:(NSError *)error{
-	SMADD_LOG_METHOD
-	[self reciveAdStatus:SMADD_HOUSEAD_NAME
-				dataType:SMADD_AD_LOAD_ERROR];
-}
-
-- (void)adViewTemplateDidLoadAd:(AdViewTemplate *)adView{
-	SMADD_LOG_METHOD
-	[self reciveAdStatus:SMADD_HOUSEAD_NAME
-				dataType:SMADD_AD_LOAD_SUCCESS];
-}
-#endif
-
-/**
- * This is AdMakerDelegate section
- */
-#ifdef SMADD_ADMAKER_NAME
--(UIViewController*)currentViewControllerForAdMakerView:(AdMakerView*)view {
-    SMADD_LOG_METHOD
-	return self;
-}
-
--(NSArray*)adKeyForAdMakerView:(AdMakerView*)view {
-    SMADD_LOG_METHOD
-	return [NSArray arrayWithObjects:SMADD_ADMAKER_AD_URL,SMADD_ADMAKER_SITE_ID,SMADD_ADMAKER_ZONE_ID,nil];
-}
-
-- (void)didLoadAdMakerView:(AdMakerView*)view {
-    SMADD_LOG_METHOD
-	[self.view addSubview:adMaker.view];
-    [self reciveAdStatus:SMADD_ADMAKER_NAME
-                dataType:SMADD_AD_LOAD_SUCCESS];
-}
-
-- (void)didFailedLoadAdMakerView:(AdMakerView*)view {
-    SMADD_LOG_METHOD
-    [self reciveAdStatus:SMADD_ADMAKER_NAME
-                dataType:SMADD_AD_LOAD_ERROR];
-}
-#endif
 
 /**
  * This is relate AdMob method section
@@ -502,6 +405,38 @@ didFailToReceiveAdWithError:(GADRequestError *)error {
         adMob = nil;
     }
 }
+
+/**
+ * This is AdMobDelagate section
+ */
+#pragma mark AdMobDelegate
+- (void)adViewDidReceiveAd:(GADBannerView *)bannerView {
+    SMADD_LOG_METHOD
+    [self reciveAdStatus:SMADD_ADMOB_NAME
+                dataType:SMADD_AD_LOAD_SUCCESS];
+}
+- (void)adView:(GADBannerView *)bannerView
+didFailToReceiveAdWithError:(GADRequestError *)error {
+    SMADD_LOG_METHOD
+    SMADD_LOG(@"adView:didFailToReceiveAdWithError:%@", [error localizedDescription])
+    [self reciveAdStatus:SMADD_ADMOB_NAME
+                dataType:SMADD_AD_LOAD_ERROR];
+}
+
+- (void)adViewWillPresentScreen:(GADBannerView *)bannerView {
+    SMADD_LOG_METHOD
+    [self disapperThisView];
+}
+
+- (void)adViewDidDismissScreen:(GADBannerView *)bannerView {
+    SMADD_LOG_METHOD
+    [self apperThisView];
+}
+
+- (void)adViewWillLeaveApplication:(GADBannerView *)bannerView {
+    SMADD_LOG_METHOD
+}
+
 #endif
 
 
@@ -543,6 +478,33 @@ didFailToReceiveAdWithError:(GADRequestError *)error {
         [adMaker release];
         adMaker = nil;
     }
+}
+
+/**
+ * This is AdMakerDelegate section
+ */
+#pragma mark AdMakerDelegate
+-(UIViewController*)currentViewControllerForAdMakerView:(AdMakerView*)view {
+    SMADD_LOG_METHOD
+	return self;
+}
+
+-(NSArray*)adKeyForAdMakerView:(AdMakerView*)view {
+    SMADD_LOG_METHOD
+	return [NSArray arrayWithObjects:SMADD_ADMAKER_AD_URL,SMADD_ADMAKER_SITE_ID,SMADD_ADMAKER_ZONE_ID,nil];
+}
+
+- (void)didLoadAdMakerView:(AdMakerView*)view {
+    SMADD_LOG_METHOD
+	[self.view addSubview:adMaker.view];
+    [self reciveAdStatus:SMADD_ADMAKER_NAME
+                dataType:SMADD_AD_LOAD_SUCCESS];
+}
+
+- (void)didFailedLoadAdMakerView:(AdMakerView*)view {
+    SMADD_LOG_METHOD
+    [self reciveAdStatus:SMADD_ADMAKER_NAME
+                dataType:SMADD_AD_LOAD_ERROR];
 }
 #endif
 
@@ -592,6 +554,44 @@ didFailToReceiveAdWithError:(GADRequestError *)error {
         iAd = nil;
     }
 }
+
+/**
+ * This is iAdDelegate section
+ */
+#pragma mark iAdDelegate
+- (BOOL)bannerViewActionShouldBegin:(ADBannerView *)banner willLeaveApplication:(BOOL)willLeave {
+	SMADD_LOG_METHOD
+    [self disapperThisView];
+	return YES;
+}
+
+- (void)bannerViewActionDidFinish:(ADBannerView *)banner {
+	SMADD_LOG_METHOD
+    [self apperThisView];
+}
+
+- (void)bannerViewDidLoadAd:(ADBannerView *)banner {
+	SMADD_LOG_METHOD
+	[UIView beginAnimations:@"animateAdBannerOn" context:NULL];
+	[banner setAlpha:1.0];
+	[UIView commitAnimations];
+	
+	[self reciveAdStatus:SMADD_IAD_NAME
+				dataType:SMADD_AD_LOAD_SUCCESS];
+}
+
+- (void)bannerView:(ADBannerView *)banner didFailToReceiveAdWithError:(NSError *)error
+{
+	SMADD_LOG_METHOD
+	SMADD_LOG(@"%@", [error description])
+    
+	[UIView beginAnimations:@"animateAdBannerOff" context:NULL];
+	[banner setAlpha:0.0];
+	[UIView commitAnimations];
+	
+	[self reciveAdStatus:SMADD_IAD_NAME
+				dataType:SMADD_AD_LOAD_ERROR];
+}
 #endif
 
 
@@ -635,8 +635,27 @@ didFailToReceiveAdWithError:(GADRequestError *)error {
         houseAd = nil;
     }
 }
+
+/**
+ * This is HouseAdDelagate section
+ */
+#pragma mark HouseAdDelagate
+- (void)adViewTemplate:(AdViewTemplate *)adView didFailToReceiveAdWithError:(NSError *)error{
+	SMADD_LOG_METHOD
+	[self reciveAdStatus:SMADD_HOUSEAD_NAME
+				dataType:SMADD_AD_LOAD_ERROR];
+}
+
+- (void)adViewTemplateDidLoadAd:(AdViewTemplate *)adView{
+	SMADD_LOG_METHOD
+	[self reciveAdStatus:SMADD_HOUSEAD_NAME
+				dataType:SMADD_AD_LOAD_SUCCESS];
+}
 #endif
 
+/**
+ * This is relate TG-AD method section
+ */
 #pragma mark TGAD
 #ifdef SMADD_TGAD_NAME
 //TGAd for iPhone
@@ -661,9 +680,8 @@ didFailToReceiveAdWithError:(GADRequestError *)error {
 }
 #endif
 
-
-/*
- * this faunction is beta version, please carefully to use this
+/**
+ * This is relate AdLantis method section
  */
 #pragma mark AdLantis
 #ifdef SMADD_ADLANTIS_NAME
@@ -717,8 +735,40 @@ didFailToReceiveAdWithError:(GADRequestError *)error {
 }
 #endif
 
-#pragma mark CommonMethod, No need to edit
+/**
+ * This is relate AD-STA method section
+ */
+#pragma mark AD-STA
+#ifdef SMADD_ADSTA_NAME
+- (void)showADSTA {
+    SMADD_LOG_METHOD
+    if(adsta == nil) {
+        if(isAdInTop) {
+            adsta = [[AdView alloc] initWithFrame:CGRectMake(0, 0, 320, 48)];
+        }
+        else {
+#ifdef SMADD_TGAD_NAME
+            adsta = [[AdView alloc] initWithFrame:CGRectMake(0, 12, 320, 48)];
+#else
+            adsta = [[AdView alloc] initWithFrame:CGRectMake(0, 2, 320, 48)];
+#endif
+        }
+	}
+	[self.view addSubview:adsta];
+}
 
+- (void)removeADSTA {
+    SMADD_LOG_METHOD
+    if(adsta) {
+        [adsta removeFromSuperview];
+        [adsta release];
+        adsta = nil;
+    }
+}
+#endif
+
+
+#pragma mark CommonMethod, No need to edit
 - (void)getEnableAdNamesSortByPriority {
 	SMADD_LOG_METHOD
 	
@@ -904,7 +954,10 @@ didFailToReceiveAdWithError:(GADRequestError *)error {
 #ifdef SMADD_ADLANTIS_NAME
     [adlantis release], adlantis = nil;
 #endif
-    
+
+#ifdef SMADD_ADSTA_NAME
+    [adsta release], adsta = nil;
+#endif
     //Not edit
     [_operationQueue cancelAllOperations], [_operationQueue release], _operationQueue = nil;
     [enableAdNamesSortByPriority release], enableAdNamesSortByPriority = nil;

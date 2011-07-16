@@ -68,6 +68,12 @@
 #define SMADD_ADLANTIS_PUBLISHER_ID @"NDU1Mg%3D%3D%0A"
 
 //////////////////
+//AD-STA
+//////////////////
+#import <AdStaSDK/AdView.h>
+#define SMADD_ADSTA_NAME @"adsta"
+
+//////////////////
 //SmAdd
 //////////////////
 #define SMADD_ADDISABLE_NAME @"disable"
@@ -105,6 +111,11 @@
     BOOL adlantisAlreadyAlloc;
 #endif
     
+    //AD-STA
+#ifdef SMADD_ADSTA_NAME
+    AdView *adsta;
+#endif
+    
 	//Common
     int retryCount;
 	int loadingAdPriorityNumber;
@@ -133,26 +144,27 @@ enableAdNameSortByPriority:(NSString*)adNames;
             isAdInTop:(BOOL)adInTop
 enableAdNameSortByPriority:(NSString*)adNames;
 #ifdef SMADD_ADMAKER_NAME
-@property (retain, readonly) AdMakerView *adMaker;
+@property (readonly) AdMakerView *adMaker;
 #endif
 #ifdef SMADD_ADMOB_NAME
-@property (retain, readonly) GADBannerView *adMob;
+@property (readonly) GADBannerView *adMob;
 #endif
 #ifdef SMADD_IAD_NAME
-@property (retain, readonly) ADBannerView *iAd;
+@property (readonly) ADBannerView *iAd;
 #endif
 #ifdef SMADD_HOUSEAD_NAME
-@property (retain, readonly) AdViewTemplate *houseAd;
+@property (readonly) AdViewTemplate *houseAd;
 #endif
 #ifdef SMADD_TGAD_NAME
-@property (retain, readonly) TGAView *tgAd;
+@property (readonly) TGAView *tgAd;
 #endif
 #ifdef SMADD_ADLANTIS_NAME
-@property (retain, readonly) AdlantisView *adlantis;
+@property (readonly) AdlantisView *adlantis;
 #endif
-#ifdef SMADD_AMEAD_NAME
-@property (retain, readonly) SmAddAmeAdView *ameAd;
+#ifdef SMADD_ADSTA_NAME
+@property (readonly) AdView *adsta;
 #endif
+
 @property (readonly) int loadingAdPriorityNumber;
 @property (retain, readonly) NSArray *enableAdNamesSortByPriority;
 @property (readwrite) BOOL isAdInTop;

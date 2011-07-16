@@ -18,6 +18,8 @@
 		AC0F636B13C594840042E9C0 /* MainView.xib in Resources */ = {isa = PBXBuildFile; fileRef = AC0F636A13C594840042E9C0 /* MainView.xib */; };
 		AC0F636E13C594850042E9C0 /* FlipsideViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AC0F636D13C594850042E9C0 /* FlipsideViewController.m */; };
 		AC0F637013C594850042E9C0 /* FlipsideView.xib in Resources */ = {isa = PBXBuildFile; fileRef = AC0F636F13C594850042E9C0 /* FlipsideView.xib */; };
+		AC1529D013D235A200A626C9 /* AdStaSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AC1529CF13D235A200A626C9 /* AdStaSDK.framework */; };
+		AC1529D413D236B500A626C9 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AC1529D213D236AE00A626C9 /* QuartzCore.framework */; };
 		AC1E9BDE13C5D2CE005A7A8B /* libGoogleAdMobAds.a in Frameworks */ = {isa = PBXBuildFile; fileRef = AC1E9BDC13C5D2CE005A7A8B /* libGoogleAdMobAds.a */; };
 		AC1E9BDF13C5D2CE005A7A8B /* README.txt in Resources */ = {isa = PBXBuildFile; fileRef = AC1E9BDD13C5D2CE005A7A8B /* README.txt */; };
 		AC1E9BE513C5D337005A7A8B /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AC1E9BE313C5D32B005A7A8B /* MessageUI.framework */; };
@@ -66,6 +68,8 @@
 		AC0F636C13C594850042E9C0 /* FlipsideViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FlipsideViewController.h; sourceTree = "<group>"; };
 		AC0F636D13C594850042E9C0 /* FlipsideViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FlipsideViewController.m; sourceTree = "<group>"; };
 		AC0F636F13C594850042E9C0 /* FlipsideView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = FlipsideView.xib; sourceTree = "<group>"; };
+		AC1529CF13D235A200A626C9 /* AdStaSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = AdStaSDK.framework; sourceTree = "<group>"; };
+		AC1529D213D236AE00A626C9 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		AC1E9BD613C5D2CE005A7A8B /* GADBannerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GADBannerView.h; sourceTree = "<group>"; };
 		AC1E9BD713C5D2CE005A7A8B /* GADBannerViewDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GADBannerViewDelegate.h; sourceTree = "<group>"; };
 		AC1E9BD813C5D2CE005A7A8B /* GADInterstitial.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GADInterstitial.h; sourceTree = "<group>"; };
@@ -131,6 +135,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				AC1529D413D236B500A626C9 /* QuartzCore.framework in Frameworks */,
 				AC1E9BF813C5F00C005A7A8B /* libz.1.2.3.dylib in Frameworks */,
 				AC1E9BF613C5F005005A7A8B /* CFNetwork.framework in Frameworks */,
 				AC1E9BF413C5EFFC005A7A8B /* MobileCoreServices.framework in Frameworks */,
@@ -145,6 +150,7 @@
 				AC1E9BDE13C5D2CE005A7A8B /* libGoogleAdMobAds.a in Frameworks */,
 				AC1E9BEA13C5E687005A7A8B /* libTGAforiPhone.a in Frameworks */,
 				AC1E9C2913C5F0DE005A7A8B /* libadlantis_ios_sdk.a in Frameworks */,
+				AC1529D013D235A200A626C9 /* AdStaSDK.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -171,6 +177,8 @@
 		AC0F635113C594840042E9C0 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				AC1529D213D236AE00A626C9 /* QuartzCore.framework */,
+				AC1529CF13D235A200A626C9 /* AdStaSDK.framework */,
 				AC1E9BF713C5F00C005A7A8B /* libz.1.2.3.dylib */,
 				AC1E9BF513C5F005005A7A8B /* CFNetwork.framework */,
 				AC1E9BF313C5EFFC005A7A8B /* MobileCoreServices.framework */,
@@ -369,7 +377,7 @@
 /* Begin PBXProject section */
 		AC0F634513C594840042E9C0 /* Project object */ = {
 			isa = PBXProject;
-			buildConfigurationList = AC0F634813C594840042E9C0 /* Build configuration list for PBXProject "SmAddSample" */;
+			buildConfigurationList = AC0F634813C594840042E9C0 /* Build configuration list for PBXProject "SMADDSAMPLE" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
@@ -464,7 +472,10 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 4.3;
-				OTHER_LDFLAGS = "-ObjC";
+				OTHER_LDFLAGS = (
+					"-ObjC",
+					"-all_load",
+				);
 				SDKROOT = iphoneos;
 			};
 			name = Debug;
@@ -480,7 +491,10 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 4.3;
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
-				OTHER_LDFLAGS = "-ObjC";
+				OTHER_LDFLAGS = (
+					"-ObjC",
+					"-all_load",
+				);
 				SDKROOT = iphoneos;
 			};
 			name = Release;
@@ -490,6 +504,10 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				COPY_PHASE_STRIP = NO;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)\"",
+				);
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "SmAddSample/SmAddSample-Prefix.pch";
@@ -511,6 +529,10 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				COPY_PHASE_STRIP = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)\"",
+				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "SmAddSample/SmAddSample-Prefix.pch";
 				INFOPLIST_FILE = "SmAddSample/SmAddSample-Info.plist";
@@ -530,7 +552,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		AC0F634813C594840042E9C0 /* Build configuration list for PBXProject "SmAddSample" */ = {
+		AC0F634813C594840042E9C0 /* Build configuration list for PBXProject "SMADDSAMPLE" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				AC0F637113C594850042E9C0 /* Debug */,
